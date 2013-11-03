@@ -1,37 +1,56 @@
-//create an alien object
+// ==========================================================================
+// See
+// http://sporto.github.io/blog/2013/02/22/a-plain-english-guide-to-javascript-prototypes/
+// OR
+//  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Inheritance_and_the_prototype_chain
+// ==========================================================================
+
+// ==========================================================================
+// Prototype chains, (aka prototypical inheritence), for object literals.
+// ==========================================================================
+
+// -----------------------------------------------
+// Create Object literals for alien, person and zack.
+// -----------------------------------------------
+
+
+// Remember creating Object literals will be creating instances of Object. 
+
+// create an alien object
 var alien = {
-	kind: 'alien',
-	hasTelepathy: true,
-	e: 5,
-	f: 6
+    kind: 'alien',
+    hasTelepathy: true,
+    e: 5,
+    f: 6 
 };
 
 // and a person object
 var person = {
-	kind: person,
-	c: 3,
-	d: 4
+    kind: 'person',
+    c: 3,
+    d: 4 
 };
 
 // and an object called 'zack'
 var zack = {
-	a: 1,
-	b: 2
+    a: 1,
+    b: 2 
 };
 
-//--------------------
-// Make zack an  alien
-//--------------------
-// Let's have an object 'zack' wiht it's prototypoe chain looking like
-// {a:1. b:2} ----> {e:5. f:6, kind: 'alien',...} ---> Object.prototype --> null
+// -----------------------------------------------
+// Make zack an alien
+// -----------------------------------------------
+// Let's have an object 'zack' with its prototype chain looking like:
+// {a:1, b:2} ---> {e:5, f:6, kind: 'alien', ...} ---> Object.prototype --> null
 // 'a' and 'b' are zack's properties and 'e', 'f' and 'kind' are alien properties.
 
 // assign alien as the prototype of zack
 zack.__proto__ = alien
-// zack is now liked to alien
-// it 'inherits' the properties of 'alien'
+
+// zack is now linked to alien
+// it 'inherits' the properties of alien
 console.log(zack.kind); //=> 'alien'
-console.log(zack.a);
+console.log(zack.a);  //=> 1
 console.log(zack.b);  //=> 2
 console.log(zack.hasOwnProperty('a'));  // true
 console.log(zack.hasOwnProperty('b'));  // true
@@ -44,6 +63,7 @@ console.log(zack.hasOwnProperty('f'));  // false
 
 zack.hasTelepathy ? console.log("Can read minds") : console.log("Can NOT read minds");
 console.log(zack.hasTelepathy);  //=> true
+
 
 // Look at zack in chrome inspector
 // see how zack is an instance of Object.
@@ -72,7 +92,7 @@ console.log(Object.getPrototypeOf(zack));
 
 // NOTE: prototype look ups are dynamic. They can change at anytime, even when at runtime!
 zack.__proto__ = person
-// and now zack is liked to person *not* alien.
+// and now zack is linked to person *not* alien.
 console.log(zack.kind); //=> ‘person’
 console.log(zack.a);  //=> 1
 console.log(zack.b);  //=> 2
@@ -133,8 +153,10 @@ console.log(zack.__proto__.__proto__);  // alien object literal
 // -----------------------------------------------
 
 // zack's does *not* own property c
+console(zack.hasOwnProperty('c'));
 zack.c = 123; // update property c will add this property to zack object
 // But *now* he does own a property c. And this property shadows/hides person's c property!
+console(zack.hasOwnProperty('c'));
 
 zack.name = 'zachary';  // new property 'name' will be added to zack object
 console.log(zack.c) //=> 123
@@ -178,7 +200,7 @@ var Person = function(name){
         return "I am " + this.name;
     };
 
-        // implicitly, when called with new Person('...')
+    // implicitly, when called with new Person('...')
     // returns this pointer. You can change it to return something else.
     // return this;
 }
@@ -255,28 +277,4 @@ console.log(sue.f);  //=> undefined
 console.log(sue.constructor); // undefined
 console.log(sue.prototype);   // undefined
 console.log(sue.__proto__);   // undefined
-
-// in the new object we have access to properties defined in Person.prototype
-console.log(tom.name);  //=> 'Thomas'
-console.log(tom.say());  // call function/method of object tom
-console.log(tom.kind);  //=> person, property on the  Person.prototype
-console.log(tom.goodbye());  // call function/method of the Person.prototype
-
-// Look at tom in the chrome inspector
-// see how tom is an instance of Person.
-// The constructor for tom is the Person constructor function.
-// it's prototype is undefined.
-// it's __proto__ points to Person.prototype
-console.log(tom.constructor);
-console.log(tom.prototype); // undefined
-console.log(tom.__proto__);
-
-
-
-// Create a new instance of Person with the name "Frederick"
-fred = new Person("Frederick");
-console.log(fred.name); 
-console.log(fred.say());
-console.log(fred.kind); 
-console.log(fred.goodbye());
 
